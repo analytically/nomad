@@ -285,6 +285,7 @@ export default [
     content: [
       'telemetry',
       'metrics',
+      'acl',
       {
         title: 'Cluster Management',
         href: 'https://learn.hashicorp.com/collections/nomad/manage-clusters'

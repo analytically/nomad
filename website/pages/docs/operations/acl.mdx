@@ -1,0 +1,93 @@
+---
+layout: docs
+page_title: ACL Reference
+sidebar_title: ACL Reference
+description: |-
+  Reference for Access Control Lists
+---
+
+# ACL Reference
+
+Nomad provides an optional Access Control List (ACL) system which can be used
+to control access to data and APIs. The ACL system is capability-based,
+relying on tokens which are associated with policies to determine which fine
+grained rules can be applied.
+
+This page is a reference page listing all the ACLs and mapping them to Nomad
+commands. For a detailed guide to configuring ACLs, see [Secure Nomad with
+Access Control](https://learn.hashicorp.com/collections/nomad/access-control)
+
+## Namespaced Capabilities
+
+The table below lists the ACLs capabilities associated with namespaces, along
+with the commands they control.
+
+<!-- markdownlint-disable -->
+
+| ACL                  | Description  | Commands           |
+| -------------------- | ------------ | -----              |
+| `list-jobs` | Allows listing the jobs and seeing coarse grain status. | `nomad job status` |
+| `read-job` | Allows inspecting a job and seeing fine grain status. | `nomad job status`<br/>`nomad alloc status` |
+| `submit-job` | Allows jobs to be submitted or modified. | `nomad job run`<br/>`nomad job promote`<br/>`nomad job revert`<br/>`nomad job stop`<br/>`nomad alloc signal`<br/>`nomad alloc stop` |
+| `dispatch-job` | Allows jobs to be dispatched | `nomad job dispatch` |
+| `read-logs` | Allows the logs associated with a job to be viewed. | `nomad alloc logs` |
+| `read-fs` | Allows the filesystem of allocations associated to be viewed. | `nomad alloc fs` |
+| `alloc-exec` | Allows an operator to connect and run commands in running allocations. | `nomad alloc exec` |
+| `alloc-node-exec` | Allows an operator to connect and run commands in  allocations running without filesystem isolation, for example, raw_exec jobs. | `nomad alloc exec` |
+| `alloc-lifecycle` | Allows an operator to stop individual allocations manually. |`nomad alloc stop`<br/>`nomad alloc signal` |
+| `csi-register-plugin` | Allows jobs to be submitted that register themselves as CSI plugins. | `nomad job run` |
+| `csi-write-volume` | Allows CSI volumes to be registered or deregistered. | `nomad volume register`<br/>`nomad volume deregister`<br/>`nomad volume detach` |
+| `csi-read-volume` | Allows inspecting a CSI volume and seeing fine grain status. | `nomad volume status` |
+| `csi-list-volume` | Allows listing CSI volumes and seeing coarse grain status. |`nomad volume status`|
+| `csi-mount-volume` | Allows jobs to be submitted that claim a CSI volume. | `nomad job run` |
+| `list-scaling-policies` | Allows listing scaling policies. | `nomad scaling policy list` |
+| `read-scaling-policy` | Allows inspecting a scaling policy. |`nomad scaling policy info` |
+| `read-job-scaling` | Allows inspecting the current scaling of a job. | `nomad job scaling-events` |
+| `scale-job` | Allows scaling a job up or down. | `nomad job scale` |
+| `sentinel-override` | Allows soft mandatory policies to be overridden. | `nomad job run` |
+
+<!-- markdownlint-enable -->
+
+
+## Capabilities Without Namespaces
+
+The table below lists the ACLs capabilities not associated with namespaces,
+along with the commands they control.
+
+<!-- markdownlint-disable -->
+
+| ACL                  | Description  | Commands           |
+| -------------------- | ------------ | -----              |
+| `node` | Controls access to the Node API | `nomad node status`<br/>`nomad node drain`<br/>`nomad node eligibility`<br/>`nomad node config` |
+| `agent`| Controls access to the Agent API |
+| `operator` | Controls access to the Operator API | `nomad operator autopilot`<br/>`nomad operator debug`<br/>`nomad operator keyring`<br/>`nomad operator metrics`<br/>`nomad operator raft`<br/>`nomad operator snapshot` |
+| `quota` | Controls access to quota specifications | `nomad quota apply`<br/>`nomad quota delete`<br/>`nomad quota inspect`<br/>`nomad quota list`<br/>`nomad quota status` |
+| `host_volume` | Controls access to mounting and accessing host volumes | `nomad job run`
+| `plugin` | Controls access to CSI plugins | `nomad plugin status`
+
+<!-- markdownlint-enable -->
+
+
+## ACLs Required for Commands
+
+The table below lists the ACL capability required for each Nomad command.
+
+<!-- markdownlint-disable -->
+
+| Command              | ACL required      |
+| -------------------- | ----------------- |
+| `nomad acl bootstrap` | n/a |
+| `nomad acl policy apply` | management token |
+| `nomad acl policy delete` | management token |
+| `nomad acl policy info` | management token |
+| `nomad acl policy delete` | management token |
+| `nomad acl policy list` | management token |
+| `nomad acl token create` | management token |
+| `nomad acl token delete` | management token |
+| `nomad acl token info` | management token |
+| `nomad acl token list` | management token |
+| `nomad acl token self` | management token |
+| `nomad acl token update` | management token |
+| `nomad alloc exec`   | `namespace:alloc-exec`<br/>`namespace:alloc-node-exec`|
+
+<!-- markdownlint-enable -->

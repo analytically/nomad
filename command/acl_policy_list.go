@@ -18,6 +18,10 @@ Usage: nomad acl policy list
 
   List is used to list available ACL policies.
 
+  This command requires a management ACL token to view all policies. A
+  non-management token can be used to list policies associated with that
+  token.
+
 General Options:
 
   ` + generalOptionsUsage(usageOptsDefault|usageOptsNoNamespace) + `
